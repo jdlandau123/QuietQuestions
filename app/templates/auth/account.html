@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Account {% endblock %}
+
+{% block css %}
+<style>
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <h2>Your Account</h2>
+  <p>Username: {{ user.username }}</p>
+  <button>Change Password</button>
+  <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit">Logout</button>
+  </form>
+<div>
+<div>
+  <p>Questions</p>
+  {% for question in questions %}
+    <p>{{ question.text }}</p>
+  {% endfor %}
+</div>
+{% endblock %}

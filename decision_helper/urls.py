@@ -16,9 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from app.views import login
+from app.views import login_view, index, account, new_question, question_detail
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path("login/", login, name="login"),
+    path("", index, name="index"),
+    path("ask/", new_question, name="new question"),
+    path("questions/<int:id>", question_detail, name="question detail"),
+    path("login/", login_view, name="login"),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("account/", account, name="account"),
     path("admin/", admin.site.urls),
 ]

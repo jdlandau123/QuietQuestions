@@ -5,6 +5,8 @@ from django.core.validators import MinValueValidator
 # Create your models here.
 class Question(models.Model):
     text = models.TextField()
+    postedDate = models.DateField(auto_now_add=True)
+    hidden = models.BooleanField(default=False)
     user = models.ForeignKey(User, related_name="questions", on_delete=models.CASCADE)
 
 

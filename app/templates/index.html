@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %} Decision Helper Home {% endblock %}
+
+{% block css %}
+<style>
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+
+  .link {
+    width: 100%;
+    color: black;
+    text-decoration: none;
+    margin-bottom: 10px;
+  }
+
+  .question-wrapper:hover {
+    cursor: pointer;
+    background-color: lightgrey;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .wrapper {
+      padding: 20px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <a href="/ask" style="margin-top: 20px;">
+    <button class="primary-btn">Ask A Question</button>
+  </a>
+  <h3>Questions</h3>
+  {% for question in questions %}
+    <a class="link" href="/questions/{{ question.id }}">
+      <div class="box question-wrapper">
+        <p style="word-wrap: break-word;">{{ question.text }}</p> 
+      </div>
+    </a>
+  {% endfor %}
+</div>
+{% endblock %}

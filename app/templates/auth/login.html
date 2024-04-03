@@ -2,10 +2,70 @@
 {% load static %}
 
 {% block title %} Login {% endblock %}
+
 {% block css %}
-<link rel="stylesheet" href="{% static 'auth/login.css' %}" />
+<style>
+  h1 {
+    text-align: center;
+  }
+
+  .wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 30px;
+  }
+
+  .divider {
+    border-right: 1pt solid lightgrey;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .wrapper {
+      flex-direction: column;
+    }
+
+    .divider {
+      border-right: transparent;
+      border-bottom: 1pt solid lightgrey;
+    }
+  }
+</style>
 {% endblock %}
 
 {% block content %}
-<h1>Login</h1>
+  <h2 style="text-align: center;">Welcome!</h2>
+  <div class="wrapper">
+    <form method="POST" class="divider">
+      {% csrf_token %}
+      <p>Login</p>
+      <input name="username_login" type="text" placeholder="Username" required />
+      <input name="password_login" type="password" placeholder="Password" required />
+      <button class="primary-btn" type="submit">Log In</button>
+    </form>
+
+
+    <form method="POST">
+      {% csrf_token %}
+      <p>Sign Up</p>
+      <input name="username_register" type="text" placeholder="Username" required />
+      <input name="password_register" type="password" placeholder="Password" required />
+      <button class="primary-btn" type="submit">Sign Up</button>
+    </form>
+  </div>
+  {% if messages %}
+    {% for message in messages %}
+      <p class="error-msg" style="color: red; text-align: center;">
+        {{ message }}
+      </p>
+    {% endfor %}
+  {% endif %}
 {% endblock %}

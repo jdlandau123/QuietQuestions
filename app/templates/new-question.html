@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %} Ask A Question {% endblock %}
+
+{% block css %}
+<style>
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+
+  form {
+    width: 100%;
+  }
+
+  textarea {
+    width: 100%;
+  }
+
+  .labeled-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .wrapper {
+      padding: 10px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <h2>Ask A Question</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.text.label }}
+    {{ form.text }}
+    <div class="box">
+      <h3 style="text-align: center;">
+        What Are Your Options?
+      </h3>
+
+      {{ form.choice1.label }}
+      {{ form.choice1 }}
+
+      {{ form.choice2.label }}
+      {{ form.choice2 }}
+
+      {{ form.choice3.label }}
+      {{ form.choice3 }}
+
+      {{ form.choice4.label }}
+      {{ form.choice4 }}
+    </div>
+
+    <button type="submit" class="primary-btn center-btn" style="margin-top: 20px; width: 150px;">
+      Post
+    </button>
+  </form>
+</div>
+{% endblock %}

@@ -1,7 +1,69 @@
 :root {
-  --primary: #6863D4
+  --primary: #6863D4;
 }
 
 body {
-  font-family: Poppins, Helvetica, Arial, sans-serif;
+  /* font-family: "dotgothic16", poppins, helvetica, arial, sans-serif; */
+  font-family: poppins, helvetica, arial, sans-serif;
+  margin: 0;
+  width: 100vw;
 }
+
+input, textarea, button {
+  font-family: inherit;
+}
+
+/* input::-webkit-input-placeholder { */
+/*   font-family: "dotgothic16", poppins, helvetica, arial, sans-serif; */
+/* } */
+
+/* input:-ms-input-placeholder { */
+/*   font-family: "dotgothic16", poppins, helvetica, arial, sans-serif; */
+/* } */
+
+/* input:-moz-placeholder { */
+/*   font-family: "dotgothic16", poppins, helvetica, arial, sans-serif; */
+/* } */
+
+/* input::-moz-placeholder { */
+/*   font-family: "dotgothic16", poppins, helvetica, arial, sans-serif; */
+/* } */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--primary);
+  color: white;
+}
+
+.icon-link {
+  text-decoration: none;
+}
+
+.primary-btn {
+  color: white;
+  background-color: var(--primary);
+  padding: 10px;
+  border: transparent;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.primary-btn:hover {
+  cursor: pointer;
+}
+
+.center-btn {
+  /* width: 100%; */
+  display: block;
+  margin: 0 auto;
+}
+
+.box {
+  padding: 10px;
+  border: 1pt solid lightgrey;
+  border-radius: 5px;
+}
+
