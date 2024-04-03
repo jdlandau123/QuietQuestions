@@ -2,14 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.paginator import Paginator
 from .models import Question, Choice
 from .forms import QuestionForm, ChoicesForm
 
 def index(request):
-    questions = Question.objects.all().order_by("-postedDate")
+    questions = Question.objects.filter(hidden=False).order_by("-postedDate")
+    paginator = Paginator(questions, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     return render(request, "index.html", {
         "user": request.user,
-        "questions": questions
+        "page_obj": page_obj
     })
 
 

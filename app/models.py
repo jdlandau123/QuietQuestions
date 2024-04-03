@@ -1,8 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 
 # Create your models here.
+class User(AbstractUser):
+    pass
+
+
 class Question(models.Model):
     text = models.TextField()
     postedDate = models.DateField(auto_now_add=True)

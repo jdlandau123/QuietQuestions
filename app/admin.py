@@ -1,7 +1,10 @@
 from django.contrib import admin
-from .models import Question, Choice
+from .models import Question, Choice, User
 
-# Register your models here.
-admin.site.register(Question)
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    readonly_fields = ["postedDate"]
+
 admin.site.register(Choice)
+admin.site.register(User)
 

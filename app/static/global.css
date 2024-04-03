@@ -55,6 +55,15 @@ input, textarea, button {
   cursor: pointer;
 }
 
+.primary-btn:disabled {
+  background-color: lightgrey;
+  color: grey;
+}
+
+.primary-btn:disabled:hover {
+  cursor: default;
+}
+
 .center-btn {
   /* width: 100%; */
   display: block;
