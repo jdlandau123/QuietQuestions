@@ -55,6 +55,14 @@ input, textarea, button {
   color: var(--tertiary);
 }
 
+.grow { 
+  transition: all .2s ease-in-out; 
+}
+
+.grow:hover { 
+  transform: scale(1.1); 
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -74,10 +82,12 @@ input, textarea, button {
   border: transparent;
   border-radius: 5px;
   font-weight: bold;
+  transition: all .2s ease-in-out; 
 }
 
 .btn:hover {
   cursor: pointer;
+  transform: scale(1.1); 
 }
 
 .btn:disabled {

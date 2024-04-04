@@ -12,11 +12,7 @@
     padding-right: 20%;
   }
 
-  form {
-    width: 100%;
-  }
-
-  textarea {
+  form, textarea, input {
     width: 100%;
   }
 
@@ -40,8 +36,11 @@
   <h2>Ask A Question</h2>
   <form method="POST">
     {% csrf_token %}
-    {{ form.text.label }}
-    {{ form.text }}
+    {{ form.title.label }}
+    {{ form.title }}
+
+    {{ form.body.label }}
+    {{ form.body }}
     <div class="box">
       <h3 style="text-align: center;">
         What Are Your Options?

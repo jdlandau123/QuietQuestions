@@ -20,13 +20,15 @@ def new_question(request):
     if request.method == "POST":
         form = QuestionForm(request.POST)
         if form.is_valid():
-            text = form.cleaned_data["text"]
+            title = form.cleaned_data["title"]
+            body = form.cleaned_data["body"]
             c1 = form.cleaned_data["choice1"]
             c2 = form.cleaned_data["choice2"]
             c3 = form.cleaned_data["choice3"]
             c4 = form.cleaned_data["choice4"]
             question = Question.objects.create(
-                text=text,
+                title=title,
+                body=body,
                 user=request.user
             )
             for c in [c1, c2, c3, c4]:
@@ -50,13 +52,25 @@ def question_detail(request, id):
             choice = Choice.objects.get(id=selected_id)
             choice.selected_count = choice.selected_count + 1
             choice.save()
-            return redirect("/")
+            return redirect(f"/questions/{id}/results")
     else:
         form = ChoicesForm(q)
     return render(request, "question-detail.html", {
         "question": q,
         "form": form
     })
+
+
+def question_results(request, id):
+    q = Question.objects.get(id=id)
+    data = {
+        "title": q.title,
+        "body": q.body,
+        "choices": []
+    }
+    for index, choice in enumerate(q.choices.all()):
+        data["choices"].append({"text": choice.text, "count": choice.selected_count})
+    return render(request, "question-results.html", {"data": data})
 
 
 # auth views

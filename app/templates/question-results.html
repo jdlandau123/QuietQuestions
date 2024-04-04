@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Result {% endblock %}
+
+{% block css %}
+<style>
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+
+  p {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+
+  #graph-wrapper {
+    width: 75%;
+    margin-bottom: 20px;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .wrapper {
+      padding: 10px;
+    }
+
+    #graph-wrapper {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <p>{{ data.title }}</p>
+  <p style="font-size: 10pt;">{{ data.body }}</p>
+
+  <div id="graph-wrapper">
+    <canvas id="chart" height="200"></canvas>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{{ data|json_script:'data' }}
+<script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+<script>
+  const data = JSON.parse(document.getElementById('data').textContent);
+
+  const ctx = document.getElementById("chart").getContext("2d");
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: data.choices.map(d => d.text),
+      datasets: [{
+        label: 'Choice Counts',
+        data: data.choices.map(d => d.count),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    },
+  });
+</script>
+{% endblock %}

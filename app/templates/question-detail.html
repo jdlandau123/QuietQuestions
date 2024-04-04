@@ -41,7 +41,8 @@
 
 {% block content %}
 <div class="wrapper">
-  <p>{{ question.text }}</p>
+  <p>{{ question.title }}</p>
+  <p style="font-size: 10pt;">{{ question.body }}</p>
   <form method="POST">
     {% csrf_token %}
     {% for radio in form.choice %}

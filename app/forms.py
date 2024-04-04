@@ -1,7 +1,8 @@
 from django import forms
 
 class QuestionForm(forms.Form):
-    text = forms.CharField(label="Question Text", required=True, widget=forms.Textarea(attrs={
+    title = forms.CharField(label="Title", required=True)
+    body = forms.CharField(label="Body", required=False, widget=forms.Textarea(attrs={
         "rows": 3,
         "class": "labeled-field"
     }))

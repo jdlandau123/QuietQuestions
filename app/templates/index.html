@@ -34,14 +34,16 @@
 
 {% block content %}
 <div class="wrapper">
+  {% if request.user.is_authenticated %}
   <a href="/ask" style="margin-top: 20px;">
     <button class="btn primary-bg">Ask A Question</button>
   </a>
+  {% endif %}
   <h3>Questions</h3>
   {% for question in page_obj %}
     <a class="link" href="/questions/{{ question.id }}">
       <div class="box question-wrapper">
-        <p style="word-wrap: break-word;">{{ question.text }}</p> 
+        <p style="word-wrap: break-word;">{{ question.title }}</p> 
       </div>
     </a>
   {% endfor %}
@@ -53,7 +55,7 @@
       {% endif %}
 
       <span class="current">
-        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
       </span>
 
       {% if page_obj.has_next %}

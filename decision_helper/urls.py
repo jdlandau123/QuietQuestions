@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from app.views import auth, index, account, new_question, question_detail, \
-    change_password, auth_login, auth_register
+    change_password, auth_login, auth_register, question_results
 from django.contrib.auth import views as auth_views
 from rest_framework import routers
 from app.api import QuestionViewSet
@@ -13,6 +13,7 @@ urlpatterns = [
     path("", index, name="index"),
     path("ask/", new_question, name="new question"),
     path("questions/<int:id>", question_detail, name="question detail"),
+    path("questions/<int:id>/results", question_results, name="question results"),
     path("auth/", auth, name="auth"),
     path("login/", auth_login, name="login"),
     path("register/", auth_register, name="register"),
