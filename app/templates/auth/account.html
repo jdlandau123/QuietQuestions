@@ -16,12 +16,22 @@
 
 {% block content %}
 <div class="wrapper">
-  <h2>Your Account</h2>
-  <p>Username: {{ user.username }}</p>
-  <button>Change Password</button>
+  <h2>{{ user.username }}</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <p style="text-align: center; color: {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}red{% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}green{% endif %}">
+        {{ message }}
+      </p>
+    {% endfor %}
+  {% endif %}
+
+  <a class="icon-link" href="/account/change_password">
+    <button class="btn secondary-bg">Change Password</button>
+  </a>
   <form method="post" action="{% url 'logout' %}">
       {% csrf_token %}
-      <button type="submit">Logout</button>
+      <button class="btn tertiary-bg" type="submit">Logout</button>
   </form>
 <div>
 <div>
@@ -30,4 +40,10 @@
     <p>{{ question.text }}</p>
   {% endfor %}
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  const btn = document.getElementById("changePasswordBtn");
+</script>
 {% endblock %}

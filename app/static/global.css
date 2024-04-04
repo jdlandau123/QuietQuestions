@@ -1,5 +1,7 @@
 :root {
   --primary: #6863D4;
+  --secondary: #008c6e;
+  --tertiary: #c24c00;
 }
 
 body {
@@ -29,6 +31,30 @@ input, textarea, button {
 /*   font-family: "dotgothic16", poppins, helvetica, arial, sans-serif; */
 /* } */
 
+.primary-bg {
+  background-color: var(--primary);
+}
+
+.secondary-bg {
+  background-color: var(--secondary);
+}
+
+.tertiary-bg {
+  background-color: var(--tertiary);
+}
+
+.primary-font {
+  color: var(--primary);
+}
+
+.secondary-font {
+  color: var(--secondary);
+}
+
+.tertiary-font {
+  color: var(--tertiary);
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -42,25 +68,24 @@ input, textarea, button {
   text-decoration: none;
 }
 
-.primary-btn {
+.btn {
   color: white;
-  background-color: var(--primary);
   padding: 10px;
   border: transparent;
   border-radius: 5px;
   font-weight: bold;
 }
 
-.primary-btn:hover {
+.btn:hover {
   cursor: pointer;
 }
 
-.primary-btn:disabled {
+.btn:disabled {
   background-color: lightgrey;
   color: grey;
 }
 
-.primary-btn:disabled:hover {
+.btn:disabled:hover {
   cursor: default;
 }
 

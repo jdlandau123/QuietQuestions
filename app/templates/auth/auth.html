@@ -20,8 +20,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
     padding: 30px;
+  }
+
+  .labeled-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
   }
 
   .divider {
@@ -44,21 +50,27 @@
 {% block content %}
   <h2 style="text-align: center;">Welcome!</h2>
   <div class="wrapper">
-    <form method="POST" class="divider">
+    <form method="POST" action="/login/" class="divider">
       {% csrf_token %}
       <p>Login</p>
-      <input name="username_login" type="text" placeholder="Username" required />
-      <input name="password_login" type="password" placeholder="Password" required />
-      <button class="primary-btn" type="submit">Log In</button>
+      {% for field in login_form %}
+        <div class="labeled-field">
+          {{ field.label }}
+          {{ field }}
+        </div>
+      {% endfor %}
+      <button class="btn primary-bg" type="submit">Log In</button>
     </form>
-
-
-    <form method="POST">
+    <form method="POST" action="/register/">
       {% csrf_token %}
-      <p>Sign Up</p>
-      <input name="username_register" type="text" placeholder="Username" required />
-      <input name="password_register" type="password" placeholder="Password" required />
-      <button class="primary-btn" type="submit">Sign Up</button>
+      <p>Register</p>
+      {% for field in register_form %}
+        <div class="labeled-field">
+          {{ field.label }}
+          {{ field }}
+        </div>
+      {% endfor %}
+      <button class="btn primary-bg" type="submit">Submit</button>
     </form>
   </div>
   {% if messages %}

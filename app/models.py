@@ -2,9 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 
-# Create your models here.
 class User(AbstractUser):
-    pass
+    followed_questions = models.ManyToManyField("Question", related_name="followed_questions")
 
 
 class Question(models.Model):
@@ -12,6 +11,9 @@ class Question(models.Model):
     postedDate = models.DateField(auto_now_add=True)
     hidden = models.BooleanField(default=False)
     user = models.ForeignKey(User, related_name="questions", on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["-postedDate"]
 
 
 class Choice(models.Model):

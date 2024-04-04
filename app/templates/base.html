@@ -16,10 +16,11 @@
       <a href="/" style="color: white; text-decoration: none;">
         <h1 style="font-size: 18pt;">Decision Helper</h1>
       </a>
-      <a class="icon-link" href="{% if request.user.is_authenticated %}/account{% else %}/login{% endif %}">
+      <a class="icon-link" href="{% if request.user.is_authenticated %}/account{% else %}/auth{% endif %}">
         <img src="{% static 'icons/avatar.svg' %}" alt="Account Page" />
       </a>
     </div>
     {% block content %}{% endblock %} 
+    {% block js %}{% endblock %}
   </body>
 </html>

@@ -1,13 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.paginator import Paginator
-from .models import Question, Choice
-from .forms import QuestionForm, ChoicesForm
+from .models import User, Question, Choice
+from .forms import QuestionForm, ChoicesForm, AuthForm, ChangePasswordForm
 
 def index(request):
-    questions = Question.objects.filter(hidden=False).order_by("-postedDate")
+    questions = Question.objects.filter(hidden=False)
     paginator = Paginator(questions, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -61,23 +60,55 @@ def question_detail(request, id):
 
 
 # auth views
-def login_view(request):
-    if request.method == "POST":
-        if "username_login" in request.POST:
-            username = request.POST["username_login"]
-            password = request.POST["password_login"]
-            user = authenticate(request, username=username, password=password)
-        else:
-            username = request.POST["username_register"]
-            password = request.POST["password_register"]
-            user = User.objects.create_user(username, None, password)
+def auth(request):
+    login_form = AuthForm()
+    register_form = AuthForm()
+    return render(request, "auth/auth.html", {
+        "login_form": login_form,
+        "register_form": register_form
+    })
 
-        if user is not None:
-            login(request, user)
-            return redirect("/")
-        else:
+
+def auth_login(request):
+    form = AuthForm(request.POST)
+
+    if form.is_valid():
+        username = form.cleaned_data["username"]
+        password = form.cleaned_data["password"]
+        user = authenticate(request, username=username, password=password)
+
+        if user is None:
             messages.add_message(request, messages.WARNING, "User Not Found")
-    return render(request, "auth/login.html", {})
+            login_form = AuthForm()
+            register_form = AuthForm()
+            return render(request, "auth/auth.html", {
+                "login_form": login_form,
+                "register_form": register_form
+            })
+
+        login(request, user)
+        return redirect("/")
+
+
+def auth_register(request):
+    form = AuthForm(request.POST)
+
+    if form.is_valid():
+        username = form.cleaned_data["username"]
+        password = form.cleaned_data["password"]
+        user = User.objects.create_user(username, None, password)
+
+        if user is None:
+            messages.add_message(request, messages.WARNING, "Failed to create user")
+            login_form = AuthForm()
+            register_form = AuthForm()
+            return render(request, "auth/auth.html", {
+                "login_form": login_form,
+                "register_form": register_form
+            })
+
+        login(request, user)
+        return redirect("/")
 
 
 def account(request):
@@ -86,6 +117,24 @@ def account(request):
         "user": request.user,
         "questions": questions
     })
+
+
+def change_password(request):
+    if request.method == "POST":
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            if request.user.check_password(form.cleaned_data["old_password"]):
+                request.user.set_password(form.cleaned_data["new_password"])
+                request.user.save()
+                login(request, request.user)
+                messages.add_message(request, messages.SUCCESS, "Password changed successfully")
+                return redirect("/account")
+            else:
+                messages.add_message(request, messages.ERROR, "Password incorrect")
+                return redirect("/account")
+    else:
+        form = ChangePasswordForm()
+    return render(request, "auth/change-password.html", {"form": form})
 
 
 

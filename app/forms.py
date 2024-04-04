@@ -32,3 +32,12 @@ class ChoicesForm(forms.Form):
         )
 
 
+class AuthForm(forms.Form):
+    username = forms.CharField(label="Username", required=True)
+    password = forms.CharField(label="Password", required=True, widget=forms.PasswordInput())
+
+
+class ChangePasswordForm(forms.Form):
+    old_password = forms.CharField(label="Old Password", required=True, widget=forms.PasswordInput())
+    new_password = forms.CharField(label="New Password", required=True, widget=forms.PasswordInput())
+
