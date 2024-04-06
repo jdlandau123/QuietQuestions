@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %} Result {% endblock %}
+
+{% block css %}
+<style>
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .wrapper {
+      padding: 10px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <p>
+    Only voters can view a question's results. Please vote on this question to view this page.
+  </p>
+  <a href="{{ request.path | make_list | slice:':-8' | join:'' }}">
+    <button class="btn primary-bg btn-center">Go Vote</button>
+  </a>
+</div>
+{% endblock %}

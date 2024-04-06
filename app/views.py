@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.core.paginator import Paginator
+from guardian.shortcuts import assign_perm
+from guardian.decorators import permission_required
 from .models import User, Question, Choice
 from .forms import QuestionForm, ChoicesForm, AuthForm, ChangePasswordForm
 
@@ -37,6 +39,9 @@ def new_question(request):
                         text=c,
                         question=question
                     )
+            assign_perm("view_question", request.user, question)
+            assign_perm("delete_question", request.user, question)
+            assign_perm("change_question", request.user, question)
             return redirect("/")
     else:
         form = QuestionForm()
@@ -52,6 +57,7 @@ def question_detail(request, id):
             choice = Choice.objects.get(id=selected_id)
             choice.selected_count = choice.selected_count + 1
             choice.save()
+            assign_perm("view_question", request.user, q)
             return redirect(f"/questions/{id}/results")
     else:
         form = ChoicesForm(q)
@@ -61,6 +67,7 @@ def question_detail(request, id):
     })
 
 
+@permission_required("app.view_question", (Question, "id", "id"), return_403=True)
 def question_results(request, id):
     q = Question.objects.get(id=id)
     data = {
@@ -75,6 +82,8 @@ def question_results(request, id):
 
 # auth views
 def auth(request):
+    if request.user.is_authenticated:
+        return redirect("/account")
     login_form = AuthForm()
     register_form = AuthForm()
     return render(request, "auth/auth.html", {
