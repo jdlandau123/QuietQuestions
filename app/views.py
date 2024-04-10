@@ -5,17 +5,38 @@ from django.core.paginator import Paginator
 from guardian.shortcuts import assign_perm
 from guardian.decorators import permission_required
 from .models import User, Question, Choice
-from .forms import QuestionForm, ChoicesForm, AuthForm, ChangePasswordForm
+from .forms import QuestionForm, ChoicesForm, SearchForm, AuthForm, ChangePasswordForm
 
 def index(request):
     questions = Question.objects.filter(hidden=False)
+    if request.user.is_authenticated:
+        questions = questions.exclude(user=request.user)
     paginator = Paginator(questions, 10)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return render(request, "index.html", {
-        "user": request.user,
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "search_form": SearchForm()
     })
+
+
+def search(request):
+    if request.method == "POST":
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            s = form.cleaned_data["search"]
+            questions = Question.objects.filter(hidden=False, title__icontains=s)
+            if request.user.is_authenticated:
+                questions = questions.exclude(user=request.user)
+            paginator = Paginator(questions, 10)
+            page_number = request.GET.get("page")
+            page_obj = paginator.get_page(page_number)
+            return render(request, "index.html", {
+                "page_obj": page_obj,
+                "search_form": SearchForm()
+            })
+    else:
+        return redirect("/")
 
 
 def new_question(request):
@@ -50,6 +71,9 @@ def new_question(request):
 
 def question_detail(request, id):
     q = Question.objects.get(id=id)
+    if q.user == request.user or request.user.has_perm("view_question", q):
+        # prevents users from voting on the same question more than once
+        return redirect(f"/questions/{id}/results")
     if request.method == "POST":
         form = ChoicesForm(q, request.POST)
         if form.is_valid():
@@ -71,13 +95,29 @@ def question_detail(request, id):
 def question_results(request, id):
     q = Question.objects.get(id=id)
     data = {
+        "id": q.id,
         "title": q.title,
         "body": q.body,
+        "user_id": q.user.id,
+        "user_followed_ids": list(request.user.followed_questions.all().values_list("id", flat=True)),
         "choices": []
     }
     for index, choice in enumerate(q.choices.all()):
         data["choices"].append({"text": choice.text, "count": choice.selected_count})
     return render(request, "question-results.html", {"data": data})
+
+
+def following(request):
+    questions = request.user.followed_questions.all()
+    if request.user.is_authenticated:
+        questions = questions.exclude(user=request.user)
+    paginator = Paginator(questions, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "index.html", {
+        "page_obj": page_obj,
+        "search_form": SearchForm()
+    })
 
 
 # auth views

@@ -10,6 +10,7 @@
     align-items: center;
     padding-left: 20%;
     padding-right: 20%;
+    padding-top: 20px;
   }
 
   .link {
@@ -24,6 +25,10 @@
     background-color: lightgrey;
   }
 
+  form, input {
+    width: 100%;
+  }
+
   @media only screen and (max-width: 800px) {
     .wrapper {
       padding: 20px;
@@ -34,18 +39,34 @@
 
 {% block content %}
 <div class="wrapper">
+  <form method="POST" action="/search">
+    {% csrf_token %}
+    {{ search_form.search.label }}
+    <div style="display: flex; justify-content: space-around; gap: 10px;">
+      {{ search_form.search }}
+      <button type="submit" class="btn primary-bg center-btn">
+        Search
+      </button>
+    </div>
+  </form>
   {% if request.user.is_authenticated %}
-  <a href="/ask" style="margin-top: 20px;">
-    <button class="btn primary-bg">Ask A Question</button>
-  </a>
+  <div style="display: flex; justify-content: space-around; width: 100%;">
+    <a href="/ask" style="margin-top: 20px;">
+      <button class="btn primary-bg">Ask A Question</button>
+    </a>
+    <a href="/following" style="margin-top: 20px;">
+      <button class="btn secondary-bg">Followed Questions</button>
+    </a>
+  </div>
   {% endif %}
   <h3>Questions</h3>
   {% for question in page_obj %}
-    <a class="link" href="/questions/{{ question.id }}">
-      <div class="box question-wrapper">
-        <p style="word-wrap: break-word;">{{ question.title }}</p> 
-      </div>
-    </a>
+  <a class="link"
+     href="{% if 'following' in request.path %}/questions/{{ question.id }}/results{% else %}/questions/{{ question.id }}{% endif %}">
+    <div class="box question-wrapper">
+      <p style="word-wrap: break-word;">{{ question.title }}</p> 
+    </div>
+  </a>
   {% endfor %}
   <div class="pagination">
     <span class="step-links">

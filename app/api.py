@@ -15,9 +15,17 @@ class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
-    @action(detail=True, methods=['post', 'delete'])
+    @action(detail=True, methods=["GET"])
     def follow_question(self, request, pk=None):
-        pass
+        question = self.get_object()
+        request.user.followed_questions.add(question)
+        return Response(question.title, status=status.HTTP_200_OK) 
+
+    @action(detail=True, methods=["GET"])
+    def unfollow_question(self, request, pk=None):
+        question = self.get_object()
+        request.user.followed_questions.remove(question)
+        return Response(question.title, status=status.HTTP_200_OK) 
 
 
 class ChangePasswordSerializer(serializers.Serializer):

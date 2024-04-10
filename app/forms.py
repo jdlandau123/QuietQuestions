@@ -1,27 +1,42 @@
 from django import forms
 
+TEXTAREA_ATTRS = {
+    "rows": 2,
+    "class": "labeled_field"
+}
+
+CHOICE_MAX_LENGTH = 150
+
 class QuestionForm(forms.Form):
     title = forms.CharField(label="Title", required=True)
-    body = forms.CharField(label="Body", required=False, widget=forms.Textarea(attrs={
+    body = forms.CharField(label="Body", required=False, strip=False, widget=forms.Textarea(attrs={
         "rows": 3,
         "class": "labeled-field"
     }))
-    choice1 = forms.CharField(label="Choice 1", required=True, widget=forms.Textarea(attrs={
-        "rows": 2,
-        "class": "labeled-field"
-    }))
-    choice2 = forms.CharField(label="Choice 2", required=True, widget=forms.Textarea(attrs={
-        "rows": 2,
-        "class": "labeled-field"
-    }))
-    choice3 = forms.CharField(label="Choice 3", required=False, widget=forms.Textarea(attrs={
-        "rows": 2,
-        "class": "labeled-field"
-    }))
-    choice4 = forms.CharField(label="Choice 4", required=False, widget=forms.Textarea(attrs={
-        "rows": 2,
-        "class": "labeled-field"
-    }))
+    choice1 = forms.CharField(
+        label="Choice 1",
+        required=True,
+        max_length=CHOICE_MAX_LENGTH, 
+        widget=forms.Textarea(attrs=TEXTAREA_ATTRS)
+    )
+    choice2 = forms.CharField(
+        label="Choice 2",
+        required=True,
+        max_length=CHOICE_MAX_LENGTH,
+        widget=forms.Textarea(attrs=TEXTAREA_ATTRS)
+    )
+    choice3 = forms.CharField(
+        label="Choice 3",
+        required=False,
+        max_length=CHOICE_MAX_LENGTH,
+        widget=forms.Textarea(attrs=TEXTAREA_ATTRS)
+    )
+    choice4 = forms.CharField(
+        label="Choice 4",
+        required=False,
+        max_length=CHOICE_MAX_LENGTH,
+        widget=forms.Textarea(attrs=TEXTAREA_ATTRS)
+    )
 
 
 class ChoicesForm(forms.Form):
@@ -33,8 +48,12 @@ class ChoicesForm(forms.Form):
         )
 
 
+class SearchForm(forms.Form):
+    search = forms.CharField(label="Seach for a question", required=False)
+
+
 class AuthForm(forms.Form):
-    username = forms.CharField(label="Username", required=True)
+    username = forms.CharField(label="Username", max_length=50, required=True)
     password = forms.CharField(label="Password", required=True, widget=forms.PasswordInput())
 
 

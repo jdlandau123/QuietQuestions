@@ -38,11 +38,17 @@
 {% block content %}
 <div class="wrapper">
   <p>{{ data.title }}</p>
-  <p style="font-size: 10pt;">{{ data.body }}</p>
+  <p style="font-size: 10pt;">{{ data.body | linebreaksbr }}</p>
 
   <div id="graph-wrapper">
-    <canvas id="chart" height="200"></canvas>
+    <canvas id="chart" height="250"></canvas>
   </div>
+
+  {% if data.user_id != request.user.id %}
+  <button id="followBtn" class="btn primary-bg center-btn">
+    {% if data.id in data.user_followed_ids %}Following{% else %}Follow{% endif %}
+  </button>
+  {% endif %}
 </div>
 {% endblock %}
 
@@ -52,11 +58,25 @@
 <script>
   const data = JSON.parse(document.getElementById('data').textContent);
 
+  function formatLabel(labelText) {
+    const lineLen = 4;
+    const split = labelText.split(' ');
+    if (split.length < lineLen) {
+      return labelText;
+    } else {
+      const arr = [];
+      for (let i = 0; i < split.length; i += lineLen) {
+        arr.push(split.slice(i, i+lineLen).join(' '));
+      }
+      return arr;
+    }
+  }
+
   const ctx = document.getElementById("chart").getContext("2d");
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: data.choices.map(d => d.text),
+      labels: data.choices.map(d => formatLabel(d.text)),
       datasets: [{
         label: 'Choice Counts',
         data: data.choices.map(d => d.count),
@@ -85,5 +105,27 @@
       }
     },
   });
+</script>
+<script>
+  followBtn = document.getElementById("followBtn");
+  const isFollowing = data.user_followed_ids.includes(data.id);
+
+  if (followBtn) {
+    if (isFollowing) {
+      followBtn.addEventListener("click", async () => {
+        const response = await fetch(`/api/questions/${data.id}/unfollow_question`);
+        if (response.ok) {
+          followBtn.innerText = "Follow";
+        }
+      });
+    } else {
+      followBtn.addEventListener("click", async () => {
+        const response = await fetch(`/api/questions/${data.id}/follow_question`);
+        if (response.ok) {
+          followBtn.innerText = "Following";
+        }
+      });
+    }
+  }
 </script>
 {% endblock %}
