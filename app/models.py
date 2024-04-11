@@ -8,7 +8,7 @@ class User(AbstractUser):
 
 class Question(models.Model):
     title = models.CharField(max_length=500)
-    body = models.TextField()
+    body = models.TextField(blank=True, null=True)
     postedDate = models.DateField(auto_now_add=True)
     hidden = models.BooleanField(default=False)
     user = models.ForeignKey(User, related_name="questions", on_delete=models.CASCADE)

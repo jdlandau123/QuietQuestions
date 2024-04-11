@@ -70,3 +70,8 @@ class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(label="Old Password", required=True, widget=forms.PasswordInput())
     new_password = forms.CharField(label="New Password", required=True, widget=forms.PasswordInput())
 
+
+class ReportQuestionForm(forms.Form):
+    report_question = forms.BooleanField(label="Are you sure you want to report this question?", required=False)
+
+

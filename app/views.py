@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
 from guardian.shortcuts import assign_perm
 from guardian.decorators import permission_required
 from .models import User, Question, Choice
-from .forms import QuestionForm, ChoicesForm, SearchForm, AuthForm, ChangePasswordForm
+from .forms import QuestionForm, ChoicesForm, SearchForm, AuthForm, ChangePasswordForm, \
+    ReportQuestionForm
 
 def index(request):
     questions = Question.objects.filter(hidden=False)
@@ -118,6 +120,44 @@ def following(request):
         "page_obj": page_obj,
         "search_form": SearchForm()
     })
+
+
+def report(request, id):
+    question = Question.objects.get(id=id)
+    if request.method == "POST":
+        form = ReportQuestionForm(request.POST)
+        if form.is_valid():
+            report = form.cleaned_data["report_question"]
+            if not report:
+                return redirect("/")
+            question.hidden = True
+            question.save()
+            admin = User.objects.get(username="admin")
+            send_mail(
+               "Question Reported",
+                f"""
+                A question on Decision Helper was reported. Please review question id = {question.id}.
+                The question will be hidden until further changes are made.
+                """,
+                "decision_helper_app@app.com",
+                [admin.email],
+                fail_silently=True
+            )
+            messages.add_message(request, messages.SUCCESS, "Thank you for helping to keep this community safe")
+            return redirect("/confirmation")
+    else:
+        form = ReportQuestionForm()
+    return render(request, "report-question.html", {
+        "question": question,
+        "form": form
+    })
+
+
+def confirmation(request):
+    m = messages.get_messages(request)
+    if len(m) == 0:
+        return redirect("/")
+    return render(request, "confirmation.html", {})
 
 
 # auth views

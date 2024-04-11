@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %} Report Question {% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <h3>Report Question</h3>
+  <div style="width: 100%; text-align: left;">
+    <p>Please report questions if they are any of the following:</p>
+    <ul>
+      <li>Racist</li>
+      <li>Sexist</li>
+      <li>Violent</li>
+      <li>Abusive</li>
+      <li>Hateful in any way</li>
+      <li>Include personal information</li>
+      <li>Spam</li>
+    </ul>
+    <p>
+      Once a question is reported, an admin will review its content to determine whether or not it should be removed. 
+      Until this review is complete, the question will be temporarily hidden. Please check the box below to acknowledge
+      these terms and report the question.
+    </p>
+  </div>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <button class="btn tertiary-bg center-btn" type="submit" style="margin-top: 20px;">
+      Report
+    </button>
+  </form>
+</div>
+{% endblock %}

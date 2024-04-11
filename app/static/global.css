@@ -15,7 +15,7 @@ h3 {
   font-weight: 500;
 }
 
-p {
+p, input, li, label {
   font-size: 16px;
 }
 
@@ -30,6 +30,7 @@ input, textarea, button {
   padding-left: 20%;
   padding-right: 20%;
   padding-top: 20px;
+  margin-bottom: 40px;
 }
 
 /* input::-webkit-input-placeholder { */
@@ -114,6 +115,12 @@ input, textarea, button {
 
 .btn:disabled:hover {
   cursor: default;
+}
+
+.report-link {
+  color: var(--tertiary);
+  font-size: 16px;
+  margin-top: 20px;
 }
 
 .center-btn {

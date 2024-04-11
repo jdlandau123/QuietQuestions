@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.core.mail import send_mail
 from .models import Question, User
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -26,6 +27,24 @@ class QuestionViewSet(viewsets.ModelViewSet):
         question = self.get_object()
         request.user.followed_questions.remove(question)
         return Response(question.title, status=status.HTTP_200_OK) 
+
+    @action(detail=True, methods=["GET"])
+    def report_question(self, request, pk=None):
+        question = self.get_object()
+        question.hidden = True
+        question.save()
+        admin = User.objects.get(username="admin")
+        send_mail(
+           "Decision Helper - Question Reported",
+            f"""
+            A question on Decision Helper was reported. Please review question id = {question.id}.
+            The question will be hidden until further changes are made.
+            """,
+            "decision_helper_app@app.com",
+            [admin.email],
+            fail_silently=True
+        )
+        return Response("Question reported", status=status.HTTP_200_OK)
 
 
 class ChangePasswordSerializer(serializers.Serializer):

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %} Thank You {% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  {% if messages %}
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+  <a style="text-decoration: none;" href="/">
+    <button class="btn primary-bg center-btn" type="button" style="margin-top: 20px;">
+      Return Home
+    </button>
+  </a>
+</div>
+{% endblock %}
