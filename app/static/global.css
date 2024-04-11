@@ -11,8 +11,25 @@ body {
   width: 100vw;
 }
 
+h3 {
+  font-weight: 500;
+}
+
+p {
+  font-size: 16px;
+}
+
 input, textarea, button {
   font-family: inherit;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 20%;
+  padding-right: 20%;
+  padding-top: 20px;
 }
 
 /* input::-webkit-input-placeholder { */
@@ -111,3 +128,15 @@ input, textarea, button {
   border-radius: 5px;
 }
 
+.labeled-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 800px) {
+  .wrapper {
+    padding: 20px;
+  }
+}

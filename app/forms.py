@@ -2,17 +2,26 @@ from django import forms
 
 TEXTAREA_ATTRS = {
     "rows": 2,
-    "class": "labeled_field"
+    "class": "labeled-field"
 }
 
 CHOICE_MAX_LENGTH = 150
 
 class QuestionForm(forms.Form):
-    title = forms.CharField(label="Title", required=True)
-    body = forms.CharField(label="Body", required=False, strip=False, widget=forms.Textarea(attrs={
-        "rows": 3,
-        "class": "labeled-field"
-    }))
+    title = forms.CharField(
+        label="Title",
+        required=True,
+        widget=forms.TextInput(attrs={"class": "labeled-field"})
+    )
+    body = forms.CharField(
+        label="Body",
+        required=False,
+        strip=False,
+        widget=forms.Textarea(attrs={
+            "rows": 3,
+            "class": "labeled-field"
+        })
+    )
     choice1 = forms.CharField(
         label="Choice 1",
         required=True,

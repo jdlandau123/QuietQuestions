@@ -4,36 +4,15 @@
 
 {% block css %}
 <style>
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-left: 20%;
-    padding-right: 20%;
-  }
-
   form, textarea, input {
     width: 100%;
-  }
-
-  .labeled-field {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 20px;
-  }
-
-  @media only screen and (max-width: 800px) {
-    .wrapper {
-      padding: 10px;
-    }
   }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="wrapper">
-  <h2>Ask A Question</h2>
+  <h3>Ask A Question</h3>
   <form method="POST">
     {% csrf_token %}
     {{ form.title.label }}

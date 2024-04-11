@@ -4,14 +4,6 @@
 
 {% block css %}
 <style>
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-left: 20%;
-    padding-right: 20%;
-  }
-
   form {
     width: 100%
   }
@@ -29,20 +21,14 @@
     cursor: pointer;
     background-color: lightgrey;
   }
-
-  @media only screen and (max-width: 800px) {
-    .wrapper {
-      padding: 10px;
-    }
-  }
 </style>
 {% endblock %}
 
 
 {% block content %}
 <div class="wrapper">
-  <p>{{ question.title }}</p>
-  <p style="font-size: 10pt;">{{ question.body | linebreaksbr }}</p>
+  <h3>{{ question.title }}</h3>
+  <p>{{ question.body | linebreaksbr }}</p>
   <form method="POST">
     {% csrf_token %}
     {% for radio in form.choice %}

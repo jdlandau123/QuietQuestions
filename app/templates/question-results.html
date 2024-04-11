@@ -5,17 +5,19 @@
 
 {% block css %}
 <style>
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-left: 20%;
-    padding-right: 20%;
-  }
-
   p {
     max-width: 100%;
     word-wrap: break-word;
+  }
+
+  .choices-wrapper {
+    text-align: left;
+    padding: 10px;
+    border: 1pt solid lightgrey;
+    border-radius: 5px;
+    font-size: 16px;
+    width: calc(100% - 20px);
+    margin-bottom: 20px;
   }
 
   #graph-wrapper {
@@ -24,10 +26,6 @@
   }
 
   @media only screen and (max-width: 800px) {
-    .wrapper {
-      padding: 10px;
-    }
-
     #graph-wrapper {
       width: 100%;
     }
@@ -37,11 +35,21 @@
 
 {% block content %}
 <div class="wrapper">
-  <p>{{ data.title }}</p>
-  <p style="font-size: 10pt;">{{ data.body | linebreaksbr }}</p>
+  <h3>{{ data.title }}</h3>
+
+  {% if data.body %}
+  <p>{{ data.body | linebreaksbr }}</p>
+  {% endif %}
+
+  <div class="choices-wrapper">
+    <h3>Choices</h3>
+    {% for choice in data.choices %}
+    <p>Choice {{ forloop.counter }}) {{ choice.text }}</p>
+    {% endfor %}
+  </div>
 
   <div id="graph-wrapper">
-    <canvas id="chart" height="250"></canvas>
+    <canvas id="chart" height="200"></canvas>
   </div>
 
   {% if data.user_id != request.user.id %}
@@ -58,25 +66,34 @@
 <script>
   const data = JSON.parse(document.getElementById('data').textContent);
 
-  function formatLabel(labelText) {
-    const lineLen = 4;
-    const split = labelText.split(' ');
-    if (split.length < lineLen) {
-      return labelText;
-    } else {
-      const arr = [];
-      for (let i = 0; i < split.length; i += lineLen) {
-        arr.push(split.slice(i, i+lineLen).join(' '));
-      }
-      return arr;
+  <!-- function formatLabel(labelText) { -->
+  <!--   const lineLen = 4; -->
+  <!--   const split = labelText.split(' '); -->
+  <!--   if (split.length < lineLen) { -->
+  <!--     return labelText; -->
+  <!--   } else { -->
+  <!--     const arr = []; -->
+  <!--     for (let i = 0; i < split.length; i += lineLen) { -->
+  <!--       arr.push(split.slice(i, i+lineLen).join(' ')); -->
+  <!--     } -->
+  <!--     return arr; -->
+  <!--   } -->
+  <!-- } -->
+
+  function getLabels() {
+    const labels = [];
+    for (let i = 1; i <= data.choices.length; i++) {
+      labels.push(`Choice ${i}`);
     }
+    return labels;
   }
 
   const ctx = document.getElementById("chart").getContext("2d");
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: data.choices.map(d => formatLabel(d.text)),
+      <!-- labels: data.choices.map(d => formatLabel(d.text)), -->
+      labels: getLabels(),
       datasets: [{
         label: 'Choice Counts',
         data: data.choices.map(d => d.count),
@@ -99,11 +116,20 @@
       scales: {
         yAxes: [{
           ticks: {
-            beginAtZero: true
+            beginAtZero: true,
+            fontSize: 16
+          }
+        }],
+        xAxes: [{
+          ticks: {
+            fontSize: 16
           }
         }]
+      },
+      legend: {
+        display: false
       }
-    },
+    }
   });
 </script>
 <script>

@@ -5,14 +5,11 @@
 
 {% block css %}
 <style>
-  h1 {
-    text-align: center;
-  }
-
   .wrapper {
     display: flex;
-    width: 100%;
     justify-content: center;
+    flex-direction: row;
+    align-items: center;
   }
 
   form {
@@ -23,13 +20,6 @@
     padding: 30px;
   }
 
-  .labeled-field {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 20px;
-  }
-
   .divider {
     border-right: 1pt solid lightgrey;
   }
@@ -37,22 +27,28 @@
   @media only screen and (max-width: 800px) {
     .wrapper {
       flex-direction: column;
+      padding: 0;
+    }
+
+    form {
+      padding: 0;
     }
 
     .divider {
       border-right: transparent;
       border-bottom: 1pt solid lightgrey;
+      padding-bottom: 30px;
     }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-  <h2 style="text-align: center;">Welcome!</h2>
+  <h3 style="text-align: center;">Welcome!</h3>
   <div class="wrapper">
     <form method="POST" action="/login/" class="divider">
       {% csrf_token %}
-      <p>Login</p>
+      <p style="font-size: 18px;">Login</p>
       {% for field in login_form %}
         <div class="labeled-field">
           {{ field.label }}
@@ -63,7 +59,7 @@
     </form>
     <form method="POST" action="/register/">
       {% csrf_token %}
-      <p>Register</p>
+      <p style="font-size: 18px;">Register</p>
       {% for field in register_form %}
         <div class="labeled-field">
           {{ field.label }}

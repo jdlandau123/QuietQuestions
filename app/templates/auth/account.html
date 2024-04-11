@@ -5,19 +5,18 @@
 
 {% block css %}
 <style>
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding-left: 20%;
-    padding-right: 20%;
-  }
-
   .link {
     width: 100%;
     color: black;
     text-decoration: none;
+  }
+
+  .btns {
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+    width: 100%;
+    gap: 10px;
   }
 
   .question {
@@ -34,8 +33,8 @@
   }
 
   @media only screen and (max-width: 800px) {
-    .wrapper {
-      padding: 20px;
+    .btns {
+      justify-content: space-between;
     }
   }
 </style>
@@ -43,7 +42,7 @@
 
 {% block content %}
 <div class="wrapper">
-  <h2>{{ user.username }}</h2>
+  <h3>{{ user.username }}</h3>
 
   {% if messages %}
     {% for message in messages %}
@@ -53,23 +52,25 @@
     {% endfor %}
   {% endif %}
 
-  <a class="icon-link" href="/account/change_password">
-    <button class="btn secondary-bg">Change Password</button>
-  </a>
-  <form method="post" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <button class="btn tertiary-bg" type="submit">Logout</button>
-  </form>
-  <div class="box questions-wrapper">
-    <p>Your Questions</p>
-    {% for question in questions %}
-      <a class="link" href="/questions/{{ question.id }}/results">
-        <div class="box question">
-          <p style="word-wrap: break-word;">{{ question.title }}</p> 
-        </div>
-      </a>
-    {% endfor %}
+  <div class="btns">
+    <a class="icon-link" href="/account/change_password">
+      <button class="btn secondary-bg">Change Password</button>
+    </a>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button class="btn tertiary-bg" type="submit">Logout</button>
+    </form>
   </div>
+  <div style="display: block; width: 100%;">
+    <p style="text-align: left; font-size: 18px;">Your Questions</p>
+  </div>
+  {% for question in questions %}
+    <a class="link" href="/questions/{{ question.id }}/results">
+      <div class="box question">
+        <p style="word-wrap: break-word;">{{ question.title }}</p> 
+      </div>
+    </a>
+  {% endfor %}
 <div>
 {% endblock %}
 
