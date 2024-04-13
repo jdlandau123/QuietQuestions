@@ -7,7 +7,7 @@ from guardian.shortcuts import assign_perm
 from guardian.decorators import permission_required
 from .models import User, Question, Choice
 from .forms import QuestionForm, ChoicesForm, SearchForm, AuthForm, ChangePasswordForm, \
-    ReportQuestionForm
+    ReportQuestionForm, ContactForm
 
 def index(request):
     questions = Question.objects.filter(hidden=False)
@@ -139,7 +139,7 @@ def report(request, id):
                 A question on Decision Helper was reported. Please review question id = {question.id}.
                 The question will be hidden until further changes are made.
                 """,
-                "decision_helper_app@app.com",
+                None,
                 [admin.email],
                 fail_silently=True
             )
@@ -158,6 +158,29 @@ def confirmation(request):
     if len(m) == 0:
         return redirect("/")
     return render(request, "confirmation.html", {})
+
+
+def contact(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            msg = form.cleaned_data["message"]
+            admin = User.objects.get(username="admin")
+            send_mail(
+                "Message from Decision Helper",
+                msg,
+                None,
+                [admin.email]
+            )
+            messages.add_message(request, messages.SUCCESS, "Thanks for reaching out!")
+            return redirect("/confirmation")
+    else:
+        form = ContactForm()
+    return render(request, "contact.html", {"form": form})
+
+
+def about(request):
+    return render(request, "about.html", {})
 
 
 # auth views

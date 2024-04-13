@@ -40,7 +40,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
             A question on Decision Helper was reported. Please review question id = {question.id}.
             The question will be hidden until further changes are made.
             """,
-            "decision_helper_app@app.com",
+            None,
             [admin.email],
             fail_silently=True
         )

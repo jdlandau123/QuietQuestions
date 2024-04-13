@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} Contact {% endblock %}
+
+{% block css %}
+<style>
+  form, textarea, input {
+    width: 100%;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  <h3>Contact</h3>
+  <p>
+    Submit the form below to send an email to the app developer/admin. Feel free to send 
+    feature requests, feedback, or anything about your experience using the app. If you'd like
+    a response, include an email address. Otherwise, leave them blank to remain anonymous.
+    I'd love to hear from you!
+  </p>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="btn primary-bg center-btn" style="margin-top: 20px;">
+      Submit
+    </button>
+  </form>
+</div>
+{% endblock %}

@@ -75,3 +75,13 @@ class ReportQuestionForm(forms.Form):
     report_question = forms.BooleanField(label="Are you sure you want to report this question?", required=False)
 
 
+class ContactForm(forms.Form):
+    message = forms.CharField(
+        label="Message",
+        required=True,
+        widget=forms.Textarea(attrs={
+            "rows": 4,
+            "class": "labeled-field"
+        })
+    )
+
