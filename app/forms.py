@@ -1,4 +1,5 @@
 from django import forms
+from .models import Category
 
 TEXTAREA_ATTRS = {
     "rows": 2,
@@ -45,6 +46,11 @@ class QuestionForm(forms.Form):
         required=False,
         max_length=CHOICE_MAX_LENGTH,
         widget=forms.Textarea(attrs=TEXTAREA_ATTRS)
+    )
+    categories = forms.MultipleChoiceField(
+        label="Categories",
+        choices=((c.name, c.name) for c in Category.objects.all()),
+        widget=forms.CheckboxSelectMultiple()
     )
 
 

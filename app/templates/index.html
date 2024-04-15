@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %} Decision Helper Home {% endblock %}
 
@@ -23,6 +24,36 @@
   span {
     font-size: 16px;
   }
+
+  .categories {
+    margin-top: 10px;
+    width: calc(100% - 20px);
+    border: 1pt solid lightgrey;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  .categories:hover {
+    cursor: pointer;
+  }
+
+  #categories-toggle {
+    display: none;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  #arrow {
+    overflow: hidden;
+    transition-duration: 0.5s;
+    transition-property: transform;
+  }
+
+  .rotated {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+  }
 </style>
 {% endblock %}
 
@@ -38,6 +69,20 @@
       </button>
     </div>
   </form>
+  
+  <div id="categories" class="categories">
+    <div style="font-size: 18px; padding: 0; margin: 0; display: flex; align-items: center; gap: 10px;">
+      Filter By Category <img id="arrow" src="{% static 'icons/arrow.svg' %}" />
+    </div>
+    <div id="categories-toggle">
+      {% for cat in categories %}
+      <a style="color: black; text-decoration: none;" href="/category/{{ cat.name }}">
+        <div class="category-tag">{{ cat.name }}</div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
   {% if request.user.is_authenticated %}
   <div style="display: flex; justify-content: space-around; width: 100%; margin-top: 10px;">
     <a href="/ask">
@@ -48,6 +93,7 @@
     </a>
   </div>
   {% endif %}
+
   <h3>Latest Questions</h3>
   {% for question in page_obj %}
   <a class="link"
@@ -75,4 +121,19 @@
     </span>
   </div>
 </div>
+<script>
+  const categories = document.getElementById('categories');
+  const categoriesToggle = document.getElementById('categories-toggle');
+  const arrow = document.getElementById('arrow');
+
+  categories.addEventListener('click', () => {
+    if (categoriesToggle.style.display === 'none') {
+      categoriesToggle.style.display = 'flex';
+      arrow.classList.add('rotated');
+    } else {
+      categoriesToggle.style.display = 'none';
+      arrow.classList.remove('rotated');
+    }
+  });
+</script>
 {% endblock %}

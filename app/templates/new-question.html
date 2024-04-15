@@ -7,6 +7,15 @@
   form, textarea, input {
     width: 100%;
   }
+
+  .category {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .category > input {
+    width: fit-content;
+  }
 </style>
 {% endblock %}
 
@@ -38,7 +47,23 @@
       {{ form.choice4 }}
     </div>
 
-    <button type="submit" class="btn primary-bg center-btn" style="margin-top: 20px; width: 150px;">
+    <div style="margin-top: 20px;">
+      <h3 style="text-align: center;">Select Categories</h3>
+      <div style="display: flex; justify-content: space-around;">
+        <div>
+          {% for cat in form.categories|slice:"4" %}
+            <div class="category">{{ cat.tag }} {{ cat.choice_label }}</div>
+          {% endfor %}
+        </div>
+        <div>
+          {% for cat in form.categories|slice:"4:" %}
+            <div class="category">{{ cat.tag }} {{ cat.choice_label }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn primary-bg center-btn" style="margin-top: 40px; width: 150px;">
       Post
     </button>
   </form>

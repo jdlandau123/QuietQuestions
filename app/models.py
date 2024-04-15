@@ -12,6 +12,7 @@ class Question(models.Model):
     postedDate = models.DateField(auto_now_add=True)
     hidden = models.BooleanField(default=False)
     user = models.ForeignKey(User, related_name="questions", on_delete=models.CASCADE)
+    categories = models.ManyToManyField("Category")
 
     class Meta:
         ordering = ["-postedDate"]
@@ -21,4 +22,14 @@ class Choice(models.Model):
     text = models.TextField()
     selected_count = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     question = models.ForeignKey(Question, related_name="choices", on_delete=models.CASCADE)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = "Categories"
 

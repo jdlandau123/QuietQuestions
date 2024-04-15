@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from guardian.shortcuts import assign_perm
 from guardian.decorators import permission_required
-from .models import User, Question, Choice
+from .models import User, Question, Choice, Category
 from .forms import QuestionForm, ChoicesForm, SearchForm, AuthForm, ChangePasswordForm, \
     ReportQuestionForm, ContactForm
 
@@ -18,7 +18,8 @@ def index(request):
     page_obj = paginator.get_page(page_number)
     return render(request, "index.html", {
         "page_obj": page_obj,
-        "search_form": SearchForm()
+        "search_form": SearchForm(),
+        "categories": Category.objects.all()
     })
 
 
@@ -35,7 +36,8 @@ def search(request):
             page_obj = paginator.get_page(page_number)
             return render(request, "index.html", {
                 "page_obj": page_obj,
-                "search_form": SearchForm()
+                "search_form": SearchForm(),
+                "categories": Category.objects.all()
             })
     else:
         return redirect("/")
@@ -51,11 +53,15 @@ def new_question(request):
             c2 = form.cleaned_data["choice2"]
             c3 = form.cleaned_data["choice3"]
             c4 = form.cleaned_data["choice4"]
+            categories = form.cleaned_data["categories"]
             question = Question.objects.create(
                 title=title,
                 body=body,
                 user=request.user
             )
+            for cat in categories:
+                c = Category.objects.get(name=cat)
+                question.categories.add(c)
             for c in [c1, c2, c3, c4]:
                 if c != "":
                     Choice.objects.create(
@@ -102,7 +108,8 @@ def question_results(request, id):
         "body": q.body,
         "user_id": q.user.id,
         "user_followed_ids": list(request.user.followed_questions.all().values_list("id", flat=True)),
-        "choices": []
+        "choices": [],
+        "categories": list(q.categories.all().values_list("name", flat=True))
     }
     for index, choice in enumerate(q.choices.all()):
         data["choices"].append({"text": choice.text, "count": choice.selected_count})
@@ -119,6 +126,20 @@ def following(request):
     return render(request, "index.html", {
         "page_obj": page_obj,
         "search_form": SearchForm()
+    })
+
+
+def category(request, name):
+    questions = Question.objects.filter(categories__name__iexact=name)
+    if request.user.is_authenticated:
+        questions = questions.exclude(user=request.user)
+    paginator = Paginator(questions, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "index.html", {
+        "page_obj": page_obj,
+        "search_form": SearchForm(),
+        "categories": Category.objects.all()
     })
 
 
