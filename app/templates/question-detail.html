@@ -28,7 +28,10 @@
 {% block content %}
 <div class="wrapper">
   <h3>{{ question.title }}</h3>
+
+  {% if question.body %}
   <p>{{ question.body | linebreaksbr }}</p>
+  {% endif %}
   
   <div style="display: flex; gap: 20px; margin-bottom: 20px;">
   {% for cat in question.categories.all %}
@@ -44,7 +47,7 @@
       <p class="box choice">{{ radio }}</p>
     {% endfor %}
     {% if not request.user.is_authenticated %}
-      <p style="text-align: center; color: red;">Please log in to vote</p>
+      <p style="text-align: center; color: var(--tertiary);">Please log in to vote</p>
     {% endif %}
     <button type="submit" class="btn primary-bg center-btn" style="margin-top: 20px;"
             {% if not request.user.is_authenticated %}disabled{% endif %}>

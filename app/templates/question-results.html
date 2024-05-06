@@ -64,10 +64,11 @@
   <button id="followBtn" class="btn primary-bg center-btn">
     {% if data.id in data.user_followed_ids %}Following{% else %}Follow{% endif %}
   </button>
-  {% endif %}
+
   <a class="report-link" href="/questions/{{ data.id }}/report">
     Report This Question
   </a>
+  {% endif %}
 </div>
 {% endblock %}
 
