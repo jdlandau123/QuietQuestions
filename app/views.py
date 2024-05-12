@@ -243,6 +243,11 @@ def auth_register(request):
     if form.is_valid():
         username = form.cleaned_data["username"]
         password = form.cleaned_data["password"]
+
+        if User.objects.filter(username=username).exists():
+            messages.add_message(request, messages.ERROR, "Username taken, please use a different one")
+            return redirect("/auth")
+
         user = User.objects.create_user(username, None, password)
 
         if user is None:
@@ -254,7 +259,7 @@ def auth_register(request):
                 "register_form": register_form
             })
 
-        login(request, user)
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect("/")
 
 
