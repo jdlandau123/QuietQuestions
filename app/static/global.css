@@ -28,6 +28,7 @@ p, input, li, label {
 
 input, textarea, button {
   font-family: inherit;
+  box-sizing: border-box;
 }
 
 footer {
@@ -145,6 +146,7 @@ footer > a {
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 20px;
+  margin-top: 5px;
 }
 
 .category-tag {
