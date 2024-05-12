@@ -6,4 +6,4 @@ The application is built to be completely private and does not collect any perso
 
 Additionally, this site stands apart from Reddit and other similar applications by lacking any form of free text or direct communication between users. This was an intentional design choice that is meant to create a streamlined experience for users by preventing unsolicited or irrelevant comments from ending up in their results.
 
-QuietQuestions is free to use and free from ads.
+QuietQuestions is free to use and free from ads. Check it out at https://www.quietquestions.com/
