@@ -6,6 +6,7 @@ from app.views import auth, index, account, new_question, question_detail, \
 from django.contrib.auth import views as auth_views
 from rest_framework import routers
 from app.api import QuestionViewSet
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 api_router = routers.DefaultRouter()
 api_router.register("questions", QuestionViewSet)
@@ -31,3 +32,6 @@ urlpatterns = [
     path("api/", include(api_router.urls)),
     path("admin/", admin.site.urls),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
+
