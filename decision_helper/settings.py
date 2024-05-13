@@ -152,7 +152,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-DEFAULT_FROM_EMAIL = "decision_helper@app.com"
+DEFAULT_FROM_EMAIL = "quietquestions@app.com"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
 EMAIL_PORT = 587

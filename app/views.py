@@ -157,7 +157,7 @@ def report(request, id):
             send_mail(
                "Question Reported",
                 f"""
-                A question on Decision Helper was reported. Please review question id = {question.id}.
+                A question on QuietQuestions was reported. Please review question id = {question.id}.
                 The question will be hidden until further changes are made.
                 """,
                 None,
@@ -185,10 +185,10 @@ def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            msg = form.cleaned_data["message"]
+            msg = f"User ID = {request.user.id} \n \n {form.cleaned_data['message']}"
             admin = User.objects.get(username="admin")
             send_mail(
-                "Message from Decision Helper",
+                "Message from QuietQuestions",
                 msg,
                 None,
                 [admin.email]

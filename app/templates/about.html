@@ -2,6 +2,14 @@
 
 {% block title %} About {% endblock %}
 
+{% block css %}
+<style>
+  .wrapper > p {
+    width: 100%;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="wrapper">
   <h3>About</h3>
@@ -15,6 +23,9 @@
     opinions? Are you tired of everything on the internet trying to collect your personal 
     information, bombard you with ads, or becoming politicized? QuietQuestions was designed
     to be free of these problems.
+    <!-- <button type="submit" class="btn primary-bg center-btn" style="margin-top: 20px;"> -->
+    <!--   Submit -->
+    <!-- </button> -->
   </p>
   <p>
     On QuietQuestions, every question must be posted with a pre-defined set of answers for 
