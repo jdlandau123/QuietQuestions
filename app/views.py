@@ -185,14 +185,15 @@ def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            msg = f"User ID = {request.user.id} \n \n {form.cleaned_data['message']}"
-            admin = User.objects.get(username="admin")
-            send_mail(
-                "Message from QuietQuestions",
-                msg,
-                None,
-                [admin.email]
-            )
+            if request.user is not None:
+                msg = f"User ID = {request.user.id} \n \n {form.cleaned_data['message']}"
+                admin = User.objects.get(username="admin")
+                send_mail(
+                    "Message from QuietQuestions",
+                    msg,
+                    None,
+                    [admin.email]
+                )
             messages.add_message(request, messages.SUCCESS, "Thanks for reaching out!")
             return redirect("/confirmation")
     else:
