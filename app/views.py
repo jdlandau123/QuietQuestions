@@ -185,7 +185,7 @@ def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            if request.user is not None:
+            if request.user.id is not None:
                 msg = f"User ID = {request.user.id} \n \n {form.cleaned_data['message']}"
                 admin = User.objects.get(username="admin")
                 send_mail(
